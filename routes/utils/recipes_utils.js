@@ -88,8 +88,11 @@ async function getRecipeFullDetails(recipe_id, session){
     if(session && session.user_id)
     {
         user_id = session.user_id
+        if (!await checkDBForRecord(user_id, recipe_id, 'LastWatched')){
+            await addToDB(user_id, recipe_id, 'LastWatched')
+        }
         // insert recipe to watchedlist
-        await addToDB(user_id, recipe_id, 'LastWatched')
+        
     }
     const isWatched = await checkDBForRecord(user_id, recipe_id, 'LastWatched');
     const isSaved = await checkDBForRecord(user_id, recipe_id, 'FavoriteRecipes');
